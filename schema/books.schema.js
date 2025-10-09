@@ -1,50 +1,69 @@
-const {Schema,model} = require("mongoose")
+const { Schema, model } = require("mongoose");
 
-const Book = new Schema({
-    title : {
-        type: String,
-        required: true
-    },    
-        img : {
-        type: String,
-        required: true 
+const Book = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 100,
+      trim: true,
     },
-        period : {
-        type: String,
-        required: true
+
+    img: {
+      type: String,
+      required: true,
+      match: /^https?:\/\/.+/,
     },
-    
-        genre : {
-        type: String,
-        required: true
+
+    period: {
+      type: String,
+      required: true,
+      enum: ["O‘rta asr", "Uyg‘onish davri", "Zamonaviy", "Boshqa"],
     },
-    
-        publishedYear: {
-        type: String,
-        required: true
+
+    genre: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 50,
+      trim: true,
     },
-    
-        page : {
-        type: String,
-        required: true
+
+    publishedYear: {
+      type: Number,
+      required: true,
+      min: 1000,
+      max: new Date().getFullYear(),
     },
-    
-        publishedHome : {
-        type: String,
-        required: true
+
+    page: {
+      type: Number,
+      required: true,
+      min: 1,
     },
-    
-        deck : {
-        type: String,
-        required: true
-    }
-},
-{
+
+    publishedHome: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 100,
+      trim: true,
+    },
+
+    deck: {
+      type: String,
+      required: true,
+      minlength: 10,
+      maxlength: 1000,
+      trim: true,
+    },
+  },
+  {
     versionKey: false,
-    timestamps:true
+    timestamps: true,
+  }
+);
 
-
-})
-
-const BookSchema = model("Book",Book)
-module.exports = BookSchema
+const BookSchema = model("Book", Book);
+module.exports = BookSchema;
