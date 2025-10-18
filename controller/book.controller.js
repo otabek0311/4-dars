@@ -1,16 +1,17 @@
+const CustomErrorHendler = require("../error/custom-error-handler")
 const BookSchema = require("../schema/books.schema")
 
-const getAllBook = async (req,res) => {
+const getAllBook = async (req,res,next) => {
     try{
-    const Book = await BookSchema.find()
+    const Book = await BookSchema.find().populate("author_info")
 
     res.status(200).json(Book)
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     } 
 }
  
-const searchBook = async (req,res) => {
+const searchBook = async (req,res,next) => {
     try{
     
     const {name} = req.query
@@ -24,75 +25,69 @@ const searchBook = async (req,res) => {
     })
 
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 
-const addBook = async (req,res) => {
+const addBook = async (req,res,next) => {
     try{
-    const { deck, publishedHome ,page ,publishedYear ,genre ,period  ,img, title  } = req.body
+    const { deck, published_home ,page ,published_year ,genre ,period  ,img, title  } = req.body
 
-    await BookSchema.create({deck, publishedHome ,page ,publishedYear ,genre ,period  ,img, title }) 
+    await BookSchema.create({deck, published_home ,page ,published_year ,genre ,period  ,img, title }) 
 
     res.status(201).json({
         message:"Added new book"
     })
 
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 
-const getOneBook = async (req,res) => {
+const getOneBook = async (req,res,next) => {
     try{
 
     const {id} = req.params
     const foundedBook = await BookSchema.findById(id)
 
     if(!foundedBook){
-    return res.status(404).json({
-        message:"Book not found"
-    })
+    throw CustomErrorHendler.NotFound('Book not found')
     }
 
     res.status(200).json(foundedBook)
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 
-const UpdateBook = async (req,res) => {
+const UpdateBook = async (req,res,next) => {
     try{
-     const {deck, publishedHome ,page ,publishedYear ,genre ,period  ,img, title} = req.body
+     const {deck, published_home ,page ,published_year ,genre ,period  ,img, title} = req.body
 
       const {id} = req.params
     const foundedBook = await BookSchema.findById(id)
 
     if(!foundedBook){
-    return res.status(404).json({
-        message:"Book not found"
-    })
+    throw CustomErrorHendler.NotFound('Book not found')
     }
 
-    await BookSchema.findByIdAndUpdate(id,{deck, publishedHome ,page ,publishedYear ,genre ,period  ,img, title})
+    await BookSchema.findByIdAndUpdate(id,{deck, published_home ,page ,published_year ,genre ,period  ,img, title})
     res.status(201).json({
         message :"Update Book"
     })
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 
-const deleteBook = async (req,res) => {
+const deleteBook = async (req,res,next) => {
     try{
     
       const {id} = req.params
     const foundedBook = await BookSchema.findById(id)
 
     if(!foundedBook){
-    return res.status(404).json({
-        message:"Book not found"
-    })
+    throw CustomErrorHendler.NotFound('Book not found')
     }
     
     await BookSchema.findByIdAndDelete(id)
@@ -102,7 +97,7 @@ const deleteBook = async (req,res) => {
     })
 
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 

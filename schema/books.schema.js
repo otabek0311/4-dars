@@ -30,7 +30,7 @@ const Book = new Schema(
       trim: true,
     },
 
-    publishedYear: {
+    published_year: {
       type: Number,
       required: true,
       min: 1000,
@@ -43,7 +43,7 @@ const Book = new Schema(
       min: 1,
     },
 
-    publishedHome: {
+    published_home: {
       type: String,
       required: true,
       minlength: 2,
@@ -57,6 +57,11 @@ const Book = new Schema(
       minlength: 10,
       maxlength: 1000,
       trim: true,
+    },
+    author_info: {
+      type: Schema.Types.ObjectId,
+      ref: "Author",
+      required: true,
     },
   },
   {

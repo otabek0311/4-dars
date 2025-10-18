@@ -1,16 +1,16 @@
 const AuthorSchema = require("../schema/author.schema")
 
-const getAllAuthors = async (req,res) => {
+const getAllAuthors = async (req,res,next) => {
     try{
     const authors = await AuthorSchema.find()
 
     res.status(200).json(authors)
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     } 
 }
  
-const search = async (req,res) => {
+const search = async (req,res,next) => {
     try{
     
     const {name} = req.query
@@ -24,11 +24,11 @@ const search = async (req,res) => {
     })
 
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 
-const addAuthors = async (req,res) => {
+const addAuthors = async (req,res,next) => {
     try{
     const {full_name,birth_date,death_date,img,bio,creativity,region,period,genre} = req.body
 
@@ -39,11 +39,11 @@ const addAuthors = async (req,res) => {
     })
 
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 
-const getOneAuthors = async (req,res) => {
+const getOneAuthors = async (req,res,next) => {
     try{
 
     const {id} = req.params
@@ -57,11 +57,11 @@ const getOneAuthors = async (req,res) => {
 
     res.status(200).json(foundedAuthor)
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 
-const UpdateAuthors = async (req,res) => {
+const UpdateAuthors = async (req,res,next) => {
     try{
      const {full_name,birth_date,death_date,img,bio,creativity,region,period,genre} = req.body
 
@@ -79,11 +79,11 @@ const UpdateAuthors = async (req,res) => {
         message :"Update Author"
     })
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 
-const deleteAuthors = async (req,res) => {
+const deleteAuthors = async (req,res,next) => {
     try{
     
       const {id} = req.params
@@ -102,7 +102,7 @@ const deleteAuthors = async (req,res) => {
     })
 
     }catch(error){
-        res.status(500).json({message:error.message})           
+        next(error)           
     }
 }
 
