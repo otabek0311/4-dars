@@ -1,0 +1,300 @@
+openapi: 3.0.0
+info:
+  title: Library API
+  version: 1.0.0
+  description: >
+    Kutubxona loyihasi uchun to‘liq API hujjat.  
+    Ushbu hujjatda barcha router’lar (`Author`, `Book`, `Audio`, `Auth`, `Profile`, `Paper`, `Citation`, `File`, `Electron`) bo‘yicha endpointlar keltirilgan.
+
+servers:
+  - url: http://localhost:4001
+    description: Local server
+
+tags:
+  - name: Author
+    description: Mualliflar bilan ishlash
+  - name: Book
+    description: Kitoblar bilan ishlash
+  - name: Audio
+    description: Audiolar bilan ishlash
+  - name: Auth
+    description: Foydalanuvchi ro‘yxatdan o‘tish va tizimga kirish
+  - name: Profile
+    description: Foydalanuvchi profili bilan ishlash
+  - name: Paper
+    description: Maqolalar bilan ishlash
+  - name: Citation
+    description: Iqtiboslar bilan ishlash
+  - name: File
+    description: Fayl yuklash va boshqarish
+  - name: Electron
+    description: Elektron resurslar bilan ishlash
+
+paths:
+  /authors:
+    get:
+      tags: [Author]
+      summary: Barcha mualliflarni olish
+      responses:
+        200:
+          description: Mualliflar ro‘yxati
+    post:
+      tags: [Author]
+      summary: Yangi muallif qo‘shish
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                birth_date:
+                  type: string
+                death_date:
+                  type: string
+                bio:
+                  type: string
+                img:
+                  type: string
+                region:
+                  type: string
+                period:
+                  type: string
+                creativity:
+                  type: string
+      responses:
+        201:
+          description: Muallif qo‘shildi
+
+  /authors/{id}:
+    get:
+      tags: [Author]
+      summary: Bitta muallifni olish
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Muallif topildi
+    put:
+      tags: [Author]
+      summary: Muallifni yangilash
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        200:
+          description: Muallif yangilandi
+    delete:
+      tags: [Author]
+      summary: Muallifni o‘chirish
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Muallif o‘chirildi
+
+  /books:
+    get:
+      tags: [Book]
+      summary: Barcha kitoblarni olish
+      responses:
+        200:
+          description: Kitoblar ro‘yxati
+    post:
+      tags: [Book]
+      summary: Yangi kitob qo‘shish
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                author_info:
+                  type: string
+                genre:
+                  type: string
+                pages:
+                  type: number
+                published_year:
+                  type: number
+                description:
+                  type: string
+                img:
+                  type: string
+      responses:
+        201:
+          description: Kitob qo‘shildi
+
+  /books/{id}:
+    get:
+      tags: [Book]
+      summary: Bitta kitobni olish
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Kitob topildi
+    put:
+      tags: [Book]
+      summary: Kitobni yangilash
+      parameters:
+        - name: id
+          in: path
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        200:
+          description: Kitob yangilandi
+    delete:
+      tags: [Book]
+      summary: Kitobni o‘chirish
+      parameters:
+        - name: id
+          in: path
+          required: true
+      responses:
+        200:
+          description: Kitob o‘chirildi
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Yangi foydalanuvchi ro‘yxatdan o‘tadi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        201:
+          description: Foydalanuvchi muvaffaqiyatli ro‘yxatdan o‘tdi
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Foydalanuvchi tizimga kiradi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Kirish muvaffaqiyatli
+
+  /profile:
+    get:
+      tags: [Profile]
+      summary: Foydalanuvchi profilini olish
+      responses:
+        200:
+          description: Profil ma’lumotlari
+
+  /audio:
+    get:
+      tags: [Audio]
+      summary: Barcha audiolarni olish
+      responses:
+        200:
+          description: Audiolar ro‘yxati
+    post:
+      tags: [Audio]
+      summary: Yangi audio qo‘shish
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Audio yuklandi
+
+  /paper:
+    get:
+      tags: [Paper]
+      summary: Barcha maqolalarni olish
+      responses:
+        200:
+          description: Maqolalar ro‘yxati
+
+  /citation:
+    get:
+      tags: [Citation]
+      summary: Barcha iqtiboslarni olish
+      responses:
+        200:
+          description: Iqtiboslar ro‘yxati
+
+  /file/upload:
+    post:
+      tags: [File]
+      summary: Fayl yuklash
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Fayl yuklandi
+
+  /electron:
+    get:
+      tags: [Electron]
+      summary: Elektron manbalarni olish
+      responses:
+        200:
+          description: Elektron manbalar ro‘yxati
